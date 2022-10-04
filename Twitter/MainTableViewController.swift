@@ -10,6 +10,8 @@ import UIKit
 
 class MainTableViewController: UITableViewController {
     
+    
+    
     var tweetArray = [NSDictionary]()
     
     var numTweets: Int!
@@ -21,18 +23,23 @@ class MainTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadTweet()
+        
         
         myRefreshControl.addTarget(self, action: #selector(loadTweet), for: .valueChanged)
         
         tableView.refreshControl = myRefreshControl
         
-        tableView.rowHeight = 100
+        tableView.rowHeight = 150
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        loadTweet()
     }
     
     
@@ -44,6 +51,11 @@ class MainTableViewController: UITableViewController {
         self.dismiss(animated: true, completion: nil)
         UserDefaults.standard.set(false, forKey: "userLoggedIn")
     }
+    
+    
+    @IBAction func composeTweetButton(_ sender: Any) {
+    }
+    
     
     // MARK: - Table view data source
     
@@ -112,6 +124,10 @@ class MainTableViewController: UITableViewController {
         if let imageData = data {
             cell.profileImageView.image = UIImage(data: imageData)
         }
+        
+        cell.setFavorite(tweetArray[indexPath.row]["favorited"] as! Bool)
+        cell.setRetweeted(tweetArray[indexPath.row]["retweeted"] as! Bool)
+        cell.tweetId = tweetArray[indexPath.row]["id"] as! Int
 
         // Configure the cell...
 
